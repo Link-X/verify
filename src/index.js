@@ -1,3 +1,3 @@
-export const verify = () => {
-    console.log('init')
-}
+
+import verifyFunc from '@/main/index.js'
+export const verify = verifyFunc
