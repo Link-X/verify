@@ -1,6 +1,8 @@
 import {
     arrayLen,
     objectLen,
+    isNumber,
+    isString,
     isObject
 } from '@/utils/index.js'
 class verify {
@@ -8,6 +10,10 @@ class verify {
         this.data = null
         this.verifyData = {}
         this.verify = {}
+        this.typeJudgeData = {
+            array: arrayLen,
+            object: objectLen
+        }
     }
     init(data, verify) {
         // 开发模式
@@ -26,6 +32,10 @@ class verify {
         }
         return message || false
     }
+    typeJudge (key, type) {
+        const func = this.typeJudgeData[type]
+        return func(this.data[key])
+    }
     convertVerify() {
         if (isObject(this.verify)) {
             return
@@ -36,6 +46,8 @@ class verify {
             const judge2 = this.verify[v][1] || []
             if (!!judge1.validator) {
                 stop = judge1.validator(this.validatorCallBack)
+            } else if (judge1.type){
+                stop = this.typeJudge(judge1.type, v)
             }
         }
     }
