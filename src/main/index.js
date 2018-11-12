@@ -3,16 +3,29 @@ import {
     objectLen,
     isNumber,
     isString,
-    isObject
+    isObject,
+    isArray,
+    isDate,
+    isBoolean
 } from '@/utils/index.js'
 class verify {
     constructor() {
         this.data = null
-        this.verifyData = {}
         this.verify = {}
         this.typeJudgeData = {
-            array: arrayLen,
-            object: objectLen
+            array: isArray,
+            object: isObject,
+            number: isNumber,
+            string: isString,
+            boolean: isBoolean,
+            date: this.judgeDate
+        }
+        this.judgeSectionFunc = {
+            array: this.getLen,
+            object: this.getObjLen,
+            number: this.getNumLen,
+            string: this.getLen,
+            date: this.getLen
         }
     }
     init(data, verify) {
@@ -23,31 +36,57 @@ class verify {
         this.data = data
         this.verify = verify
     }
-    validatorCallBack (cb) {
-        let message = ''
-        try {
-            cb()
-        } catch (err) {
-            message = err.substring(lastIndexOf('at <anonymous>:1') + 1, err.length)
-        }
-        return message || false
+    getLen (val) {
+        return val.length
     }
-    typeJudge (key, type) {
-        const func = this.typeJudgeData[type]
-        return func(this.data[key])
+    getObjLen (val) {
+        return Object.keys(val).length
+    }
+    getNumLen (val) {
+        return val
+    }
+    judgeDate (val) {
+        return isArray(val) ? (isDate(val[0]) && isDate(val[1])) : isDate(val)
+    }
+    validatorCallBack(cb) {
+        // 自定义校验
+        let message = cb && cb.message
+        return message !== undefined ? message : false
+    }
+    judgeTop(obj, val) {
+        // 校验第一个规则
+        const func = this.typeJudgeData[obj.type]
+        return obj.type ? !(val && func(val)) : !val
+    }
+    judgeBootm(obj, val) {
+        // 校验第二个规则
+        const section = obj.min && obj.max
+        const type = (val && val.constructor.name.toLowerCase()) || 'string'
+        const len = this.judgeSectionFunc[type](val)
+        const lenSection = (len > obj.min && len < obj.max)
+        return section ? !lenSection : false
     }
     convertVerify() {
-        if (isObject(this.verify)) {
+        if (!isObject(this.verify)) {
             return
         }
-        let stop = false
+        let status = {
+            stop: false,
+            message: ''
+        }
         for (let v of Object.keys(this.verify)) {
-            const judge1 = this.verify[v][0]
-            const judge2 = this.verify[v][1] || []
-            if (!!judge1.validator) {
-                stop = judge1.validator(this.validatorCallBack)
-            } else if (judge1.type){
-                stop = this.typeJudge(judge1.type, v)
+            const judge = { ...this.verify[v][0], ...this.verify[v][1] }
+            const val = this.data[v]
+            if (!!judge.validator) {
+                status.message = judge.validator(val, this.validatorCallBack)
+            } else if (judge.required) {
+                status.stop = this.judgeTop(judge, val)
+                status.stop = this.judgeBootm(judge, val)
+            }
+            if (status.stop || status.message) {
+                alert(judge.message)
+                alert(status.message)
+                return
             }
         }
     }

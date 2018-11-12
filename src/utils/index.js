@@ -10,6 +10,10 @@ export const isString = (data) =>{
     return toString.call(data) === '[object String]'
 }
 
+export const isBoolean = (data) => {
+    return toString.call(data) === '[object Boolean]'
+}
+
 export const isFunc = (data) =>{
     return toString.call(data) === '[object Function]'
 }
@@ -28,4 +32,8 @@ export const arrayLen = (data) => {
 
 export const objectLen = (data) => {
     return isObject(data) && Object.keys(data).length
+}
+
+export const isDate = (data) =>{
+    return !!data && new Date(data).toString() !== 'Invalid Date'
 }
