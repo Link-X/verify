@@ -62,37 +62,37 @@ class verify {
         const func = this.typeJudgeData[type]
         return !(val && func(val))
     }
-    judgeBootm(obj, val) {
+    judgeBottom(obj, val) {
         // 校验第二个规则
         const section = obj.min && obj.max
         const type = this.getType(val)
         const len = this.judgeSectionFunc[type](val)
-        const lenSection = (len > obj.min && len < obj.max)
+        const lenSection = (len >= obj.min && len <= obj.max)
         return section ? !lenSection : false
     }
-    convertVerify() {
-        if (!isObject(this.verify)) {
+    convertVerify(verify) {
+        if (!isObject(verify)) {
             return
         }
         let status = {
-            stop: false,
+            top: false,
+            bottom: false,
             message: ''
         }
-        for (let v of Object.keys(this.verify)) {
+        for (let v of Object.keys(verify)) {
             const judge = { ...this.verify[v][0], ...this.verify[v][1] }
             const val = this.data[v]
             if (!!judge.validator) {
                 status.message = judge.validator(val, this.validatorCallBack)
             } else if (judge.required) {
-                status.stop = this.judgeTop(judge, val)
-                status.stop = this.judgeBootm(judge, val)
-            }
-            if (status.stop || status.message) {
-                alert(judge.message)
-                alert(status.message)
-                return
+                status.top = this.judgeTop(judge, val)
+                status.bottom = this.judgeBottom(judge, val)
             }
         }
+        return status
+    }
+    validate () {
+        const status = this.convertVerify()
     }
     finish() {
 
