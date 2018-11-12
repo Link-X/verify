@@ -48,6 +48,9 @@ class verify {
     judgeDate (val) {
         return isArray(val) ? (isDate(val[0]) && isDate(val[1])) : isDate(val)
     }
+    getType (val) {
+        return (val && val.constructor.name.toLowerCase()) || 'string'
+    }
     validatorCallBack(cb) {
         // 自定义校验
         let message = cb && cb.message
@@ -55,13 +58,14 @@ class verify {
     }
     judgeTop(obj, val) {
         // 校验第一个规则
-        const func = this.typeJudgeData[obj.type]
-        return obj.type ? !(val && func(val)) : !val
+        const type = obj.type ? obj.type : this.getType(val)
+        const func = this.typeJudgeData[type]
+        return !(val && func(val))
     }
     judgeBootm(obj, val) {
         // 校验第二个规则
         const section = obj.min && obj.max
-        const type = (val && val.constructor.name.toLowerCase()) || 'string'
+        const type = this.getType(val)
         const len = this.judgeSectionFunc[type](val)
         const lenSection = (len > obj.min && len < obj.max)
         return section ? !lenSection : false
