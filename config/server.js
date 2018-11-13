@@ -13,9 +13,8 @@ const compiler = webpack(webpackOptions),
 
 
 const devMiddleware = webpackDevMiddleware(compiler, {
-  // webpack-dev-middleware 的配置选项
   publicPath: webpackOptions.output.publicPath,
-  quiet: true //向控制台显示任何内容 
+  quiet: true
 })
 const hotMiddleware = webpackHotMiddleware(compiler, {
   log: false,
@@ -25,6 +24,5 @@ const hotMiddleware = webpackHotMiddleware(compiler, {
 
 app.use(devMiddleware)
 app.use(hotMiddleware)
-// app.use(express.static(DIST_DIR))
 
 app.listen(3000, () => console.log('http://localhost:3000'))

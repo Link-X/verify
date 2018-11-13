@@ -99,15 +99,16 @@ class verify {
         }
         return status
     }
-    validate () {
+    validate (cb) {
         const status = this.convertVerify(this.verify)
-        console.log(status)
+        const result = !(status.top && status.bottom && status.message)
+        cb({
+            result: result,
+            message: status.message || undefined
+        })
     }
     finish () {
 
     }
 }
-var app = document.createElement('div');
-app.innerHTML = '<h1>Hello World h1</h1>';
-document.body.appendChild(app);
 export default verify
