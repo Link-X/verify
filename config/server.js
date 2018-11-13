@@ -1,10 +1,8 @@
 const webpack = require('webpack')
 const webpackDevMiddleware = require('webpack-dev-middleware')
-const webpackHotMiddleware = require("webpack-Hot-middleware")
+const webpackHotMiddleware = require("webpack-hot-middleware")
 const webpackOptions = require('./webpack.config.prod.js')
 const path = require('path')
-// 本地的开发环境默认就是使用 development mode
-webpackOptions.mode = 'development'
 
 const compiler = webpack(webpackOptions),
   express = require('express'),

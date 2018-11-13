@@ -1,13 +1,15 @@
 const path = require('path')
 const UglifyPlugin = require('uglifyjs-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const webpack = require('webpack')
 
 function resolve(dir) {
     return path.resolve(__dirname, '..', dir)
 }
 module.exports = {
+    mode: "development",
     entry: {
-        main: './src/index.js' // 入口
+        main: ['webpack-hot-middleware/client.js?reload=true', './src/index.js']
     },
     optimization: {
         splitChunks: {
@@ -52,6 +54,8 @@ module.exports = {
             minify: { // 压缩 HTML 的配置
                 minifyJS: true // 压缩 HTML 中出现的 JS 代码
             }
-        })
+        }),
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NoEmitOnErrorsPlugin()
     ]
 }

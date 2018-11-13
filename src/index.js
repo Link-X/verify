@@ -1,7 +1,7 @@
 import verifyFunc from '@/main/index.js'
 let main = new verifyFunc();
 let obj = {
-    a: 100,
+    a: 1000,
     b: '2222',
     c: [1, 2, 5, 3],
     d: [],
@@ -61,4 +61,7 @@ main.init(obj, ver);
 main.validate((status) => {
     console.log(status);
 })
+// if(module.hot){
+//     module.hot.accept();
+//   }
 export const verify = verifyFunc
