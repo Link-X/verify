@@ -37,7 +37,7 @@ class verify {
     }
     judgeBottom (obj, val) {
         // 校验第二个规则
-        const section = obj.min && obj.max
+        const section = obj.min && obj.max && obj.type !== 'date'
         if (!section) return false
         const type = getType(val)
         const len = getTypeLen[type](val)
