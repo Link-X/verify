@@ -31,7 +31,7 @@
          { required: false,  message: '请选择obj', validator: judgeObj }
      ],
      date: [
-         { required: true, message: '请输入正确的时间' }
+         { type: 'date' required: true, message: '校验时间是否合法时，type必须为date' }
      ]
   ]
 
@@ -43,9 +43,7 @@
           cb(new Error('不通过'))
       }
   }
- var main = new verify();
-
- main.init(obj, rule);
+ var main = new verify(obj, rule);
 
  main.validate((e) => {
      if (e.result) {
