@@ -1,5 +1,4 @@
 import verifyFunc from '@/main/index.js'
-let main = new verifyFunc();
 let obj = {
     a: 51,
     b: '2222',
@@ -43,7 +42,7 @@ let ver = {
         message: 'array'
     }],
     j: [{
-        required: true,
+        required: false,
         min: 1,
         max: 2,
         message: '12'
@@ -57,7 +56,7 @@ let ver = {
         trigger: 'blur'
     }]
 };
-main.init(obj, ver)
+const main = new verifyFunc(obj, ver)
 main.validate((status) => {
     alert(JSON.stringify(status))
     console.log(status)

@@ -1,6 +1,6 @@
 # js 优雅验证条件
 
-开发操作步骤
+开发操作步骤 <br/>
  yarn install <br/>
  yarn start
 
@@ -8,7 +8,7 @@
 
 ## 用法
  ```JavaScript
- <script src="**/main.js"></script>
+ <script src="dist/main.js"></script>
  var obj = {
      number: 1,
      string: 'str',
@@ -28,7 +28,7 @@
          { min: 0, max: 3, message: '最小为0，最大为3' }
      ],
      object: [
-         { required: false,  message: '请选择obj', validator:  }
+         { required: false,  message: '请选择obj', validator: judgeObj }
      ],
      date: [
          { required: true, message: '请输入正确的时间' }

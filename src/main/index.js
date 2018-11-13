@@ -1,41 +1,37 @@
 import {
     objectLen,
     isObject,
-    isArray,
-    isDate,
     typeOfS,
     getTypeLen,
     getType
 } from '@/utils/index.js'
 class verify {
-    constructor() {
+    constructor(data, rules) {
         this.data = null
-        this.verify = {}
+        this.rules = {}
         this.message = ""
+        this.$init(data, rules)
     }
-    init(data, verify) {
+    $init(data, rules) {
         // 开发模式
-        if (!data || !objectLen(verify)) {
+        if (!data || !objectLen(rules)) {
             console.log('设置的校验数据或规则错误')
         }
         this.data = data
-        this.verify = verify
+        this.rules = rules
     }
-    judgeDate (val) {
-        return isArray(val) ? (isDate(val[0]) && isDate(val[1])) : isDate(val)
-    }
-    validatorCallBack (cb) {
+    ruleCallBack (cb) {
         // 自定义校验
         let message = cb && cb.message
         return message
     }
-    judgeTop (obj, val) {
+    verifyTop (obj, val) {
         // 校验第一个规则
         const type = obj.type ? obj.type : getType(val)
         const func = typeOfS[type]
         return !(val && func(val))
     }
-    judgeBottom (obj, val) {
+    verifyBottom (obj, val) {
         // 校验第二个规则
         const section = obj.min && obj.max && obj.type !== 'date'
         if (!section) return false
@@ -44,8 +40,8 @@ class verify {
         const lenSection = (len >= obj.min && len <= obj.max)
         return !lenSection
     }
-    convertVerify (verify) {
-        if (!isObject(verify)) {
+    check (rules) {
+        if (!isObject(rules)) {
             return
         }
         let status = {
@@ -54,16 +50,16 @@ class verify {
             message: '',
             key: ''
         }
-        for (let v of Object.keys(verify)) {
-            const judge = { ...this.verify[v][0], ...this.verify[v][1] }
+        for (let v of Object.keys(rules)) {
+            const judge = { ...this.rules[v][0], ...this.rules[v][1] }
             const val = this.data[v]
             if (!!judge.validator) {
-                status.message = judge.validator(val, this.validatorCallBack)
+                status.message = judge.validator(val, this.ruleCallBack)
             } else if (judge.required) {
-                status.topStatus = this.judgeTop(judge, val)
-                status.bottomStatus = this.judgeBottom(judge, val)
+                status.topStatus = this.verifyTop(judge, val)
+                status.bottomStatus = this.verifyBottom(judge, val)
             } else if (!judge.required && judge.min && judge.max) {
-                status.bottomStatus = val && this.judgeBottom(judge, val)
+                status.bottomStatus = val && this.verifyBottom(judge, val)
             }
             if (status.topStatus || status.bottomStatus || status.message) {
                 status.key = v
@@ -73,7 +69,7 @@ class verify {
         return status
     }
     validate (cb) {
-        const status = this.convertVerify(this.verify)
+        const status = this.check(this.rules)
         const result = !(status.topStatus && status.bottomStatus && status.message)
         cb({
             result: result,
@@ -81,8 +77,8 @@ class verify {
             message: status.message || undefined
         })
     }
-    finish () {
-
+    addRule (rule) {
+        console.log(rule)
     }
 }
 export default verify

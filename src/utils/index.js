@@ -38,7 +38,7 @@ export const isDate = (data) => {
     return !!data && new Date(data).toString() !== 'Invalid Date'
 }
 
-export const judgeDate = (val) => {
+export const verifyDate = (val) => {
     return isArray(val) ? (isDate(val[0]) && isDate(val[1])) : isDate(val)
 }
 
@@ -62,7 +62,7 @@ export const typeOfS = {
     number: isNumber,
     string: isString,
     boolean: isBoolean,
-    date: judgeDate
+    date: verifyDate
 }
 
 export const getTypeLen = {
