@@ -45,24 +45,24 @@ class verify {
     getNumLen (val) {
         return val
     }
-    judgeDate (val) {
-        return isArray(val) ? (isDate(val[0]) && isDate(val[1])) : isDate(val)
-    }
     getType (val) {
         return (val && val.constructor.name.toLowerCase()) || 'string'
     }
-    validatorCallBack(cb) {
+    judgeDate (val) {
+        return isArray(val) ? (isDate(val[0]) && isDate(val[1])) : isDate(val)
+    }
+    validatorCallBack (cb) {
         // 自定义校验
         let message = cb && cb.message
         return message !== undefined ? message : false
     }
-    judgeTop(obj, val) {
+    judgeTop (obj, val) {
         // 校验第一个规则
         const type = obj.type ? obj.type : this.getType(val)
         const func = this.typeJudgeData[type]
         return !(val && func(val))
     }
-    judgeBottom(obj, val) {
+    judgeBottom (obj, val) {
         // 校验第二个规则
         const section = obj.min && obj.max
         const type = this.getType(val)
@@ -70,14 +70,15 @@ class verify {
         const lenSection = (len >= obj.min && len <= obj.max)
         return section ? !lenSection : false
     }
-    convertVerify(verify) {
+    convertVerify (verify) {
         if (!isObject(verify)) {
             return
         }
         let status = {
             top: false,
             bottom: false,
-            message: ''
+            message: '',
+            key: ''
         }
         for (let v of Object.keys(verify)) {
             const judge = { ...this.verify[v][0], ...this.verify[v][1] }
@@ -87,15 +88,26 @@ class verify {
             } else if (judge.required) {
                 status.top = this.judgeTop(judge, val)
                 status.bottom = this.judgeBottom(judge, val)
+            } else if (!judge.required && judge.min && judge.max) {
+                status.bottom = val && this.judgeBottom(judge, val)
+            }
+            if (status.top || status.bottom || status.message) {
+                status.key = v
+                alert(v)
+                return status
             }
         }
         return status
     }
     validate () {
-        const status = this.convertVerify()
+        const status = this.convertVerify(this.verify)
+        console.log(status)
     }
-    finish() {
+    finish () {
 
     }
 }
+var app = document.createElement('div');
+app.innerHTML = '<h1>Hello World h1</h1>';
+document.body.appendChild(app);
 export default verify

@@ -23,8 +23,7 @@ module.exports = {
     },
     output: {
         path: resolve('dist'), // 出口
-        filename: '[name].js',
-        libraryTarget: "umd"
+        filename: '[name].js'
     },
     resolve: {
         extensions: [".wasm", ".mjs", ".js", ".json"], // 查找文件顺序
@@ -33,11 +32,18 @@ module.exports = {
         }
     },
     module: {
-        rules: [{
-            test: /\.js$/, // 用 babel-loader 解析js
-            loader: 'babel-loader',
-            include: [resolve('src')]
-        }]
+        rules: [
+            {
+                test: /\.js$/, // 用 babel-loader 解析js
+                loader: 'babel-loader',
+                include: [resolve('src')]
+            },
+            {
+                test: /\.(html)$/,
+                loader: 'html-loader',
+                include: [resolve('src')]
+            }
+        ]
     },
     plugins: [
         new UglifyPlugin(), // 压缩文件

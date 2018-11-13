@@ -1,29 +1,29 @@
 export const isArray = (data) =>{
-    return toString.call(data) === '[object Array]'
+    return Object.prototype.toString.call(data) === '[object Array]'
 }
 
 export const isNumber = (data) =>{
-    return toString.call(data) === '[object Number]'
+    return Object.prototype.toString.call(data) === '[object Number]'
 }
 
 export const isString = (data) =>{
-    return toString.call(data) === '[object String]'
+    return Object.prototype.toString.call(data) === '[object String]'
 }
 
 export const isBoolean = (data) => {
-    return toString.call(data) === '[object Boolean]'
+    return Object.prototype.toString.call(data) === '[object Boolean]'
 }
 
 export const isFunc = (data) =>{
-    return toString.call(data) === '[object Function]'
+    return Object.prototype.toString.call(data) === '[object Function]'
 }
 
 export const isObject = (data) =>{
-    return toString.call(data) === '[object Object]'
+    return Object.prototype.toString.call(data) === '[object Object]'
 }
 
 export const isNull = (data) =>{
-    return toString.call(data) === '[object Null]'
+    return Object.prototype.toString.call(data) === '[object Null]'
 }
 
 export const arrayLen = (data) => {
