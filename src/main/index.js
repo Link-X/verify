@@ -73,8 +73,8 @@ class verify {
         const result = !(status.topStatus && status.bottomStatus && status.message)
         cb({
             result: result,
-            key: status.key || undefined,
-            message: status.message || undefined
+            key: status.key,
+            message: status.message
         })
     }
     addRule (rule) {
