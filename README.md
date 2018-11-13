@@ -8,6 +8,7 @@
  用法
  ## <script src="**/main.js"></script>
  // 需要校验的数据 obj
+ ```JavaScript
  var obj = {
      number: 1,
      string: 'str',
@@ -52,3 +53,4 @@
      alert('err')
      console.log(e.key + 'err')
  })
+ ```
