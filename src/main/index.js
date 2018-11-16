@@ -46,8 +46,7 @@ class verify {
             return
         }
         let status = {
-            topStatus: false,
-            bottomStatus: false,
+            status: false,
             message: '',
             key: ''
         }
@@ -57,13 +56,11 @@ class verify {
             if (!!judge.validator) {
                 judge.validator(val, this.ruleCallBack(status))
             } else if (judge.required) {
-                status.topStatus = this.verifyTop(judge, val)
-                status.bottomStatus = this.verifyBottom(judge, val)
+                status.status = this.verifyTop(judge, val) || this.verifyBottom(judge, val)
             } else if (!judge.required && judge.min && judge.max) {
-                status.bottomStatus = val && this.verifyBottom(judge, val)
+                status.status = val && this.verifyBottom(judge, val)
             }
-            const result = status.topStatus || status.bottomStatus || status.message
-            if (result) {
+            if (status.status || status.message) {
                 status.key = v
                 status.message = status.message ? status.message : judge.message
                 return status
@@ -73,7 +70,7 @@ class verify {
     }
     validate (cb) {
         const status = this.check(this.rules)
-        const result = !(status.topStatus || status.bottomStatus || status.message)
+        const result = status.status || status.message
         cb({
             result: result,
             key: status.key,
