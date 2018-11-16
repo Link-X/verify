@@ -51,7 +51,7 @@
          return
      }
      alert('err')
-     console.log(e.key + 'err')
+     console.log(e.key + 'err' + e.message)
  })
 
 
