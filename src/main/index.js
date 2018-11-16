@@ -9,13 +9,13 @@ class verify {
     constructor(data, rules) {
         this.data = null
         this.rules = {}
-        this.message = ""
         this.$init(data, rules)
     }
     $init(data, rules) {
         // 开发模式
         if (!data || !objectLen(rules)) {
-            console.log('设置的校验数据或规则错误')
+            console.error('设置的校验数据或规则错误')
+            return
         }
         this.data = data
         this.rules = rules
