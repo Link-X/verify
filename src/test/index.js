@@ -1,7 +1,7 @@
 import verifyFunc from '@/main/index.js'
 let obj = {
     a: 51,
-    b: '2222',
+    b: '22222',
     c: [1, 2, 5, 3],
     d: [],
     k: {
@@ -22,9 +22,13 @@ let ver = {
         },
         {
             min: 3,
-            max: 5,
+            max: 4,
             message: '长度在 3 到 5 个字符',
-            trigger: 'blur'
+            trigger: 'blur',
+            validator: (val, cb) => {
+                console.log(val);
+                cb(new Error("1234"))
+            },
         }
     ],
     a: [{
@@ -39,18 +43,22 @@ let ver = {
         type: "array",
         min: 1,
         max: 6,
-        message: 'array'
+        message: 'array',
+        validator: (val, cb) => {
+            cb(123)
+        }
     }],
     j: [{
         required: false,
         min: 1,
-        max: 2,
+        max: 5,
         message: '12'
     }],
     k: [{
         required: true,
         message: '输入k',
         validator: (val, cb) => {
+            console.log(val);
             cb(new Error("111"))
         },
         trigger: 'blur'
@@ -58,6 +66,6 @@ let ver = {
 };
 const main = new verifyFunc(obj, ver)
 main.validate((status) => {
-    alert(JSON.stringify(status))
+    console.log(JSON.stringify(status))
     console.log(status)
 })

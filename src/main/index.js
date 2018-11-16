@@ -20,10 +20,11 @@ class verify {
         this.data = data
         this.rules = rules
     }
-    ruleCallBack (cb) {
+    ruleCallBack (status) {
         // 自定义校验
-        let message = cb && cb.message
-        return message
+        return (cb) => { 
+            status.message =  cb && cb.message
+         }
     }
     verifyTop (obj, val) {
         // 校验第一个规则
@@ -54,15 +55,17 @@ class verify {
             const judge = { ...this.rules[v][0], ...this.rules[v][1] }
             const val = this.data[v]
             if (!!judge.validator) {
-                status.message = judge.validator(val, this.ruleCallBack)
+                judge.validator(val, this.ruleCallBack(status))
             } else if (judge.required) {
                 status.topStatus = this.verifyTop(judge, val)
                 status.bottomStatus = this.verifyBottom(judge, val)
             } else if (!judge.required && judge.min && judge.max) {
                 status.bottomStatus = val && this.verifyBottom(judge, val)
             }
-            if (status.topStatus || status.bottomStatus || status.message) {
+            const result = status.topStatus || status.bottomStatus || status.message
+            if (result) {
                 status.key = v
+                status.message = status.message ? status.message : judge.message
                 return status
             }
         }
@@ -70,7 +73,7 @@ class verify {
     }
     validate (cb) {
         const status = this.check(this.rules)
-        const result = !(status.topStatus && status.bottomStatus && status.message)
+        const result = !(status.topStatus || status.bottomStatus || status.message)
         cb({
             result: result,
             key: status.key,
