@@ -5,7 +5,7 @@ import {
     getTypeLen,
     getType
 } from '@/utils/index.js'
-class verify {
+class Verify {
     constructor(data, rules) {
         this.data = null
         this.rules = {}
@@ -81,4 +81,4 @@ class verify {
         console.log(rule)
     }
 }
-export default verify
+export default Verify
