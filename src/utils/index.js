@@ -43,7 +43,7 @@ export const verifyDate = (val) => {
 }
 
 export const getLen = (val) => {
-    return val.length
+    return val && val.length
 }
 export const getObjLen = (val) => {
     return Object.keys(val).length

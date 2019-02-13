@@ -28,7 +28,7 @@ module.exports = {
     output: {
         path: resolve('dist'), // 出口
         filename: '[name].js',
-        libraryTarget: 'umd'
+        libraryTarget: 'commonjs'
     },
     resolve: {
         extensions: [".wasm", ".mjs", ".js", ".json"], // 查找文件顺序

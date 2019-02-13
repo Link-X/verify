@@ -2,6 +2,7 @@ import {
     objectLen,
     isObject,
     typeOfS,
+    isFunc,
     getTypeLen,
     getType
 } from '@/utils/index.js'
@@ -23,6 +24,7 @@ class Verify {
     ruleCallBack (status) {
         // 自定义校验
         return (cb) => { 
+            status.status = !!(cb && cb.message)
             status.message =  cb && cb.message
          }
     }
@@ -41,7 +43,7 @@ class Verify {
         const lenSection = (len >= obj.min && len <= obj.max)
         return !lenSection
     }
-    check (rules) {
+    iterator (rules) {
         if (!isObject(rules)) {
             return
         }
@@ -53,14 +55,15 @@ class Verify {
         for (let v of Object.keys(rules)) {
             const judge = { ...this.rules[v][0], ...this.rules[v][1] }
             const val = this.data[v]
-            if (!!judge.validator) {
+            if (isFunc(judge.validator)) {
                 judge.validator(val, this.ruleCallBack(status))
             } else if (judge.required) {
                 status.status = this.verifyTop(judge, val) || this.verifyBottom(judge, val)
             } else if (!judge.required && judge.min && judge.max) {
                 status.status = val && this.verifyBottom(judge, val)
             }
-            if (status.status || status.message) {
+            if (status.status) {
+                // status 为true停止校验
                 status.key = v
                 status.message = status.message ? status.message : judge.message
                 return status
@@ -69,7 +72,7 @@ class Verify {
         return status
     }
     validate (cb) {
-        const status = this.check(this.rules)
+        const status = this.iterator(this.rules)
         const result = status.status || status.message
         cb({
             result: result,

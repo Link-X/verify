@@ -1,4 +1,5 @@
 import verifyFunc from '@/main/index.js'
+let verify = verifyFunc
 let obj = {
     a: 51,
     b: '122223',
